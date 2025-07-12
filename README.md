@@ -1,28 +1,71 @@
-# Finetuning_Transfer_Learning
-### Objective
-The categorization of images into distinct classes is a pervasive task in computer vision, and it has a wide array of applications, including in pet identification and animal monitoring systems. In this assignment, we aim to develop a model capable of accurately distinguishing between cat and dog images. Instead of building a convolutional neural network (CNN) from scratch, we will leverage transfer learning using the VGG16 model, a pre-trained model on the ImageNet dataset. VGG16 is renowned for its effectiveness in image recognition tasks, but it does not have broad categories for cats and dogs. Therefore, we will utilize the convolutional (Conv) layers of VGG16 for feature extraction and add custom fully connected (Cat) layers for the classification task.
+# Car vs Plane Classifier Using Transfer Learning (VGG16)
 
-### Objectives:
-#### Utilize VGG16 for Feature Extraction:
-● Employ the VGG16 model, excluding its top layers, to serve as a feature
-extractor for cat and dog images.
-● Ensure the input images are of the correct size (150x150) and preprocessed
-appropriately to match VGG16’s requirements.
-#### Data Preprocessing and Augmentation:
-Implement image data generators for real-time data augmentation, ensuring a
-robust and varied dataset for training the classification layers.
-#### Build and Train the Classification Model:
-● Add custom fully connected layers on top of the VGG16 model for the
-classification task.
-● Freeze the convolutional layers of VGG16 to retain the pre-trained features
-and only train the added classification layers.
-#### Model Compilation and Training:
-● Compile the model using stochastic gradient descent, categorical
-cross-entropy as the loss function, and accuracy as the evaluation metric.
-● Train the model using the training data, and validate its performance using
-a validation set.
-#### Evaluate and Test the Model:
-● Assess the model’s performance based on its accuracy in classifying
-images into cat or dog categories.
-● Implement a prediction function to classify new images, providing the
-predicted category and the associated confidence level.
+This project demonstrates a binary image classification task using **Transfer Learning** with the **VGG16** architecture from Keras. The model is trained to distinguish between images of **cars** and **planes**.
+
+---
+
+## 📁 Project Structure
+
+```
+├── Cars/ # Folder containing car images (.jpg)
+├── Planes/ # Folder containing plane images (.jpg)
+├── imagenet_class_index.json
+├── car_plane_classifier.py # Your Python script
+└── README.md
+```
+
+---
+
+## 📌 Features
+
+- Uses **VGG16** pretrained on **ImageNet**.
+- Freezes all convolutional layers and adds a new classifier head.
+- Loads car and plane images from separate folders.
+- Applies **preprocess_input** from VGG16 for consistent preprocessing.
+- Binary classification using a sigmoid output unit.
+
+---
+
+## 🧠 Model Architecture
+
+- Pretrained VGG16 (all layers frozen)
+- Added final `Dense(1, activation='sigmoid')` layer for binary classification
+- Compiled with `adam` optimizer and `binary_crossentropy` loss
+
+---
+
+## 🖼️ Dataset
+
+- Two categories:
+  - `Cars/` – Labeled as `0`
+  - `Planes/` – Labeled as `1`
+
+Ensure the folders `Cars/` and `Planes/` contain `.jpg` images for training.
+
+---
+
+## 🧪 Training
+
+```python
+model_for_cars_planes.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+model_for_cars_planes.fit(x=x, y=y, epochs=5, validation_split=0.2)
+```
+- Images are resized to 224x224.
+- Training uses 80% of the data, 20% is used for validation.
+- The VGG16 layers are not trainable (frozen), only the new classifier layer is trained.
+
+## 🛠️ How to Run
+1. Install dependencies:
+
+```
+pip install tensorflow pandas numpy
+```
+2. Place your images inside Cars/ and Planes/ directories.
+3. Ensure you have the imagenet_class_index.json file in the same directory (for class name mapping, though not directly used in training).
+
+## 📌 Notes
+- This is a basic example of transfer learning for binary classification.
+- You can further improve performance by:
+    - Unfreezing and fine-tuning top layers of VGG16
+    - Adding dropout or batch normalization
+    - Using data augmentation
